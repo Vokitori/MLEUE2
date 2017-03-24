@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<RunSettings>
+  <TestRunParameters>
+    <!-- uncomment this setting-->
+    <Parameter name="targetpath" value="L:\FH\SS2017\MLEUE2\deploy"/>    
+  </TestRunParameters>
+</RunSettings>
