@@ -25,9 +25,9 @@ namespace MLEUE2
                 new StreamReader(path);
 
 
-            while ((line = file.ReadLine().ToLower()) != null)
+            while ((line = file.ReadLine()) != null)
             {
-
+                line = line.ToLower();
                 string[] identifierSplit = line.Split(new char[] { '\t' }, 2);
                 Entry tempEntry = new Entry();
                 if (identifierSplit[0] == "spam")
@@ -49,6 +49,8 @@ namespace MLEUE2
                 {
                     tempEntry.AddWord(new Word(sentenceSplit[i]));
                 }
+
+                list.Add(tempEntry);
             }
 
             file.Close();

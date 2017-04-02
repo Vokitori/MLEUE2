@@ -11,7 +11,16 @@ namespace MLEUE2
         public SpamHamEnum Classifier;
         public List<Word> Sentence = new List<Word>();
 
+        public override string ToString()
+        {
+            string s = Classifier.ToString();
+            foreach (var item in Sentence)
+            {
+                s += " " + item;
+            }
 
+            return s;
+        }
 
         public void AddWord(Word word)
         {

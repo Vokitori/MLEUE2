@@ -27,8 +27,8 @@ namespace MLEUE2
 
         [Test]
         public void HelloWorld()
-        {
-            calc.HelloWorld();
+        {   
+            
         }
 
         #endregion

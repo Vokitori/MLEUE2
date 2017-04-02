@@ -20,5 +20,10 @@ namespace MLEUE2
         {
             return ((Word)obj).Literal == Literal;
         }
+
+        public override string ToString()
+        {
+            return Literal;
+        }
     }
 }

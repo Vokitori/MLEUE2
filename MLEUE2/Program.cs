@@ -10,7 +10,14 @@ namespace MLEUE2
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(CalculationHelper.Entropy(2,1));
+            List<Entry> list = FileToListConverter.FileToList(@"SMSSpamCollection");
+            Console.WriteLine("afterlist");
+            for (int i = 0; i < 5; i++)
+            {
+
+                Console.WriteLine(list[i].ToString());
+                
+            }
             Console.ReadLine();
             //try {
 
