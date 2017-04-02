@@ -8,13 +8,15 @@ namespace MLEUE2
 {
     class Node
     {
-        public Node yes;
-        public Node no;
+        private Node Yes;
+        private Node No;
+        public Word Word;
 
-        private bool? _isSpam;
-        public bool? IsSpam
+        private SpamHamEnum? _classifier = null;
+        public SpamHamEnum? Classifier
         {
-            get { return _isSpam; }
+            get { return _classifier; }
+            private set { _classifier = value; }
         }
 
         public Node(List<Entry> EntryList)

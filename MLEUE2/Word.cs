@@ -10,5 +10,15 @@ namespace MLEUE2
     {
         public string Literal;
         public int Count;
+
+        public Word(string literal)
+        {
+            Literal = literal;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return ((Word)obj).Literal == Literal;
+        }
     }
 }

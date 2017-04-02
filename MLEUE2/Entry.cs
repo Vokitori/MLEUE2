@@ -8,8 +8,24 @@ namespace MLEUE2
 {
     class Entry
     {
-        public SpamHamEnum Identifier;
-        public List<Word> Sentence;
+        public SpamHamEnum Classifier;
+        public List<Word> Sentence = new List<Word>();
+
+
+
+        public void AddWord(Word word)
+        {
+            foreach (var item in Sentence)
+            {
+                if (item.Equals(word))
+                {
+                    item.Count++;
+                    return;
+                }
+            }
+            Sentence.Add(word);
+        }
+
 
     }
 }
