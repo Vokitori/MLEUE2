@@ -20,14 +20,10 @@ namespace MLEUE2
         {
             return ((Word)obj).Literal == Literal;
         }
-<<<<<<< HEAD
-        
-=======
 
         public override string ToString()
         {
             return Literal;
         }
->>>>>>> 97d6c6d192eba89c54ae7735a22d758584b6df28
     }
 }
