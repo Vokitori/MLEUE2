@@ -4,26 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MLEUE2 {
-    class DecisionTree {
+namespace MLEUE2
+{
+    class DecisionTree
+    {
         private List<Entry> EntryList;
 
-        private Node _head;
-        public Node Tree {
-            get { return _head; }
-        }
+        public Node Tree { get; }
 
-        public DecisionTree(string fileName) {
-            List<Entry> entryList = FileToListConverter.FileToList(fileName);
+        public DecisionTree(string fileName, out List<Entry> testData)
+        {
+            List<Entry> entryList = FileToListConverter.FileToList(fileName, out testData);
             List<string> usedWords = new List<string>();
 
-            _head = new Node(entryList, 0, entryList.Count(), usedWords);
+            Tree = new Node(entryList, 0, entryList.Count(), usedWords);
         }
 
+        public SpamHamEnum ValidateSentence(Entry entry)
+        {
+            return Tree.ValidateSentence(entry);
+        }
 
-        public SpamHamEnum ValidateSentence(string sentence) {
-            Entry entry = new Entry();
-            entry.
+        public SpamHamEnum ValidateSentence(string sentence)
+        {
+           return  ValidateSentence(FileToListConverter.SentenceToEntry(sentence));
         }
     }
 }

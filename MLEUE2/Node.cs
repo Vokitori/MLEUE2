@@ -22,7 +22,7 @@ namespace MLEUE2
             Dictionary<string, WordData> wordCount = CountWords(entryList, head, length, usedWords, ref ham, ref spam);
             double entropy = CalculationHelper.Entropy(ham, spam);
             Word = GetBestWord(entropy, wordCount, ham, spam);
-
+          //  Console.WriteLine(Word);
             if (length == 1)
             {
                 Classifier = spam > ham ? SpamHamEnum.SPAM : SpamHamEnum.HAM;
@@ -32,8 +32,19 @@ namespace MLEUE2
             newUsedWords.Add(Word);
             int newLength = wordCount[Word].ExistsPositive + wordCount[Word].ExistsNegative;
             SortByWord(entryList, head, length);
-            Yes = new Node(entryList, head, newLength, newUsedWords);
-            No = new Node(entryList, head + newLength, length - newLength, newUsedWords);
+            try
+            {
+                if (newLength != 0)
+                    Yes = new Node(entryList, head, newLength, newUsedWords);
+            }
+            catch (NodeException exception) { Yes = null; }
+
+            try
+            {
+                if (length - newLength != 0)
+                    No = new Node(entryList, head + newLength, length - newLength, newUsedWords);
+            }
+            catch (NodeException exception) { No = null; }
         }
 
         private Dictionary<string, WordData> CountWords(List<Entry> entryList, int head, int length, List<string> usedWords, ref int ham, ref int spam)
@@ -45,9 +56,9 @@ namespace MLEUE2
                 foreach (Word word in entry.Sentence)
                 {
                     if (usedWords.Contains(word.Literal)) continue;
-
-                    if (wordCount[word.Literal] == null)
-                        wordCount[word.Literal] = new WordData();
+                    WordData wordData;
+                    if (!wordCount.TryGetValue(word.Literal, out wordData))
+                        wordCount.Add(word.Literal, new WordData());
 
                     if (entry.Classifier == SpamHamEnum.HAM)
                     {
@@ -68,7 +79,7 @@ namespace MLEUE2
         private string GetBestWord(double entropy, Dictionary<string, WordData> wordCount, int ham, int spam)
         {
             List<string> allWords = new List<string>(wordCount.Keys);
-            double highestGain = 0;
+            double highestGain = -1;
             string bestWord = "";
 
             foreach (string str in allWords)
@@ -81,6 +92,8 @@ namespace MLEUE2
                     bestWord = str;
                 }
             }
+            if (bestWord == "")
+                throw new NodeException();
             return bestWord;
         }
 
@@ -100,8 +113,30 @@ namespace MLEUE2
 
         public SpamHamEnum ValidateSentence(Entry entry)
         {
-            throw new NotImplementedException();
+            if (Classifier != null)
+                return (SpamHamEnum)Classifier;
+            if (Yes == null && No == null)
+                return SpamHamEnum.HAM;
+            if (entry.Sentence.Contains(new Word(Word)))
+            {
+                if (Yes == null)
+                    return No.ValidateSentence(entry);
+                return Yes.ValidateSentence(entry);
+            }
+            else
+            {
+                if (No == null)
+                    return Yes.ValidateSentence(entry);
+                return No.ValidateSentence(entry);
+            }
         }
+    }
+
+    class NodeException : Exception
+    {
+        public NodeException() : base() { }
+        public NodeException(string message) : base(message) { }
+        public NodeException(string message, Exception innerException) : base(message, innerException) { }
     }
 
     class WordData

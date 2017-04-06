@@ -16,7 +16,7 @@ namespace MLEUE2
 
         }
 
-        public static List<Entry> FileToList(string path)
+        public static List<Entry> FileToList(string path, out List<Entry> testData)
         {
             List<Entry> list = new List<Entry>();
 
@@ -27,43 +27,58 @@ namespace MLEUE2
 
             while ((line = file.ReadLine()) != null)
             {
-                line = line.ToLower();
-                string[] identifierSplit = line.Split(new char[] { '\t' }, 2);
-                Entry tempEntry = new Entry();
-                if (identifierSplit[0] == "spam")
-                {
-                    tempEntry.Classifier = SpamHamEnum.SPAM;
-                }
-                else if (identifierSplit[0] == "ham")
-                {
-                    tempEntry.Classifier = SpamHamEnum.HAM;
-                }
-                else
-                {
-                    throw new InvalidDataException();
-                }
-
-                string[] sentenceSplit = identifierSplit[1].Split(new char[] { ' ' });
-
-                for (int i = 0; i < sentenceSplit.Count(); i++)
-                {
-                    tempEntry.AddWord(new Word(sentenceSplit[i]));
-                }
+                Entry tempEntry = SentenceToEntry(line);
 
                 list.Add(tempEntry);
             }
 
             file.Close();
 
+            int oneTenth = list.Count / 10;
+            testData = new List<Entry>();
+            testData.AddRange(list.GetRange(0, oneTenth));
+            list.RemoveRange(0, oneTenth);
 
             return list;
+        }
+
+        public static Entry SentenceToEntry(string sentence)
+        {
+            sentence = sentence.ToLower();
+            string[] identifierSplit = sentence.Split(new char[] { '\t' }, 2);
+            Entry entry = new Entry();
+            if (identifierSplit[0] == "spam")
+            {
+                entry.Classifier = SpamHamEnum.SPAM;
+            }
+            else if (identifierSplit[0] == "ham")
+            {
+                entry.Classifier = SpamHamEnum.HAM;
+            }
+            else
+            {
+                throw new InvalidDataException();
+            }
+
+            string[] sentenceSplit = identifierSplit[1].Split(new char[] { ' ' });
+
+            for (int i = 0; i < sentenceSplit.Count(); i++)
+            {
+                Regex rgx = new Regex("[^a-zA-Z0-9 -]");
+                sentenceSplit[i] = rgx.Replace(sentenceSplit[i], "");
+                if (sentenceSplit[i].Trim().Length < 1)
+                    continue;
+                entry.AddWord(new Word(sentenceSplit[i]));
+            }
+            return entry;
+
         }
 
         private void IdentifyTags(string[] sentence)
         {
             //for (int i = 0; i < sentence.Count; i++)
             //{
-                //Regex.Match(@"\.((uk)|(us)|(fr)|(com)|(org)|(net)|(int)|(de)|(at)|(science)|(webcam)|(stream)|(men)|(party)|(study)|(top)|(click)|(gdn)|(cricket))");
+            //Regex.Match(@"\.((uk)|(us)|(fr)|(com)|(org)|(net)|(int)|(de)|(at)|(science)|(webcam)|(stream)|(men)|(party)|(study)|(top)|(click)|(gdn)|(cricket))");
             //}
         }
     }
