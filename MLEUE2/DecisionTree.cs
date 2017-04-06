@@ -14,15 +14,16 @@ namespace MLEUE2 {
         }
 
         public DecisionTree(string fileName) {
-            List<Entry> entryList = new List<Entry>(); //  <<<<< READ ENTRIES HERE
-            List<Word> usedWords = new List<Word>();
+            List<Entry> entryList = FileToListConverter.FileToList(fileName);
+            List<string> usedWords = new List<string>();
 
             _head = new Node(entryList, 0, entryList.Count(), usedWords);
         }
 
 
-        public SpamHamEnum ValidateSentence(string entry) {
-            throw new NotImplementedException();
+        public SpamHamEnum ValidateSentence(string sentence) {
+            Entry entry = new Entry();
+            entry.
         }
     }
 }

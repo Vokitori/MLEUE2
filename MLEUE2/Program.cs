@@ -10,14 +10,9 @@ namespace MLEUE2
     {
         static void Main(string[] args)
         {
-            List<Entry> list = FileToListConverter.FileToList(@"SMSSpamCollection");
-            Console.WriteLine("afterlist");
-            for (int i = 0; i < 5; i++)
-            {
 
-                Console.WriteLine(list[i].ToString());
-                
-            }
+            DecisionTree tree = new DecisionTree(@"SMSSpamCollection");
+            
             Console.ReadLine();
             //try {
 
